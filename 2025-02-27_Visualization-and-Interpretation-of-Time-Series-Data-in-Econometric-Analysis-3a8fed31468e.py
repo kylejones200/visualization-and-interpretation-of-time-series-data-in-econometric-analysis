@@ -44,7 +44,7 @@ def set_plot_style(ax, df, time_column, value_columns):
     ax.set_yticklabels([f"{y_20:.2e}", f"{y_mean:.2e}", f"{y_80:.2e}"])
 
 # Function to Plot Time Series
-def plot_time_series(df, time_column=None, value_columns=None, title=None, filename=None):
+def plot_time_series(df, time_column=None, value_columns=None, title=None, filename=None, plot: bool = False):
     if time_column is None:
         time_column = next((col for col in df.columns if df[col].dtype == "datetime64[ns]"), None)
     if time_column is None:
@@ -57,25 +57,26 @@ def plot_time_series(df, time_column=None, value_columns=None, title=None, filen
     if not value_columns:
         raise ValueError("No numeric columns found to plot.")
 
-    fig, ax = plt.subplots(figsize=(10, 5))
-    colors = plt.cm.Greys(np.linspace(0.2, 0.8, len(value_columns)))
-    for i, col in enumerate(value_columns):
-        ax.plot(df[time_column].dt.year, df[col], linewidth=2, color=colors[i])
-        last_x = df[time_column].dt.year.iloc[-1] + (df[time_column].dt.year.max() - df[time_column].dt.year.min()) * 0.02
-        last_y = df[col].iloc[-1]
-        ax.text(last_x, last_y, col, fontsize=12, color=colors[i], verticalalignment="center")
+    if plot:
+        fig, ax = plt.subplots(figsize=(10, 5))
+        colors = plt.cm.Greys(np.linspace(0.2, 0.8, len(value_columns)))
+        for i, col in enumerate(value_columns):
+            ax.plot(df[time_column].dt.year, df[col], linewidth=2, color=colors[i])
+            last_x = df[time_column].dt.year.iloc[-1] + (df[time_column].dt.year.max() - df[time_column].dt.year.min()) * 0.02
+            last_y = df[col].iloc[-1]
+            ax.text(last_x, last_y, col, fontsize=12, color=colors[i], verticalalignment="center")
 
-    set_plot_style(ax, df, time_column, value_columns)
+        set_plot_style(ax, df, time_column, value_columns)
 
-    ax.set_xlabel("Year")
-    ax.set_ylabel("GDP (Billions of Dollars)")
-    if title:
-        ax.set_title(title)
+        ax.set_xlabel("Year")
+        ax.set_ylabel("GDP (Billions of Dollars)")
+        if title:
+            ax.set_title(title)
 
-    if filename:
-        plt.savefig(filename, dpi=300, bbox_inches="tight")
+        if filename:
+            plt.savefig(filename, dpi=300, bbox_inches="tight")
 
-    plt.show()
+        plt.show()
 
 # Load GDP Data from FRED
 start = '2000-01-01'
