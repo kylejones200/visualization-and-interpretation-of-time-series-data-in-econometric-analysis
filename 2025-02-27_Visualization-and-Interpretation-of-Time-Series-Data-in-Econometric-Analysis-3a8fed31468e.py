@@ -7,16 +7,12 @@
 
 from matplotlib.ticker import FuncFormatter
 from pandas_datareader import data as web
+import signalplot
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-plt.rcParams.update({
-    'axes.grid': False,
-    "font.family": "serif",
-    "axes.labelsize": 12,
-    "axes.titlesize": 14
-})
+signalplot.apply(font_family='serif')
 
 # Function to Set Plot Style
 def set_plot_style(ax, df, time_column, value_columns):
