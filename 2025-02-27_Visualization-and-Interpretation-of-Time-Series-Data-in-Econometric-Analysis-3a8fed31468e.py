@@ -5,14 +5,15 @@
 
 # Set Global Matplotlib Style
 
-from matplotlib.ticker import FuncFormatter
-from pandas_datareader import data as web
-import signalplot
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import signalplot
+from matplotlib.ticker import FuncFormatter
+from pandas_datareader import data as web
 
-signalplot.apply(font_family='serif')
+signalplot.apply(font_family="serif")
+
 
 # Function to Set Plot Style
 def set_plot_style(ax, df, time_column, value_columns):
@@ -39,10 +40,20 @@ def set_plot_style(ax, df, time_column, value_columns):
     ax.set_yticks([y_20, y_mean, y_80])
     ax.set_yticklabels([f"{y_20:.2e}", f"{y_mean:.2e}", f"{y_80:.2e}"])
 
+
 # Function to Plot Time Series
-def plot_time_series(df, time_column=None, value_columns=None, title=None, filename=None, plot: bool = False):
+def plot_time_series(
+    df,
+    time_column=None,
+    value_columns=None,
+    title=None,
+    filename=None,
+    plot: bool = False,
+):
     if time_column is None:
-        time_column = next((col for col in df.columns if df[col].dtype == "datetime64[ns]"), None)
+        time_column = next(
+            (col for col in df.columns if df[col].dtype == "datetime64[ns]"), None
+        )
     if time_column is None:
         raise ValueError("No datetime column found.")
 
@@ -58,9 +69,19 @@ def plot_time_series(df, time_column=None, value_columns=None, title=None, filen
         colors = plt.cm.Greys(np.linspace(0.2, 0.8, len(value_columns)))
         for i, col in enumerate(value_columns):
             ax.plot(df[time_column].dt.year, df[col], linewidth=2, color=colors[i])
-            last_x = df[time_column].dt.year.iloc[-1] + (df[time_column].dt.year.max() - df[time_column].dt.year.min()) * 0.02
+            last_x = (
+                df[time_column].dt.year.iloc[-1]
+                + (df[time_column].dt.year.max() - df[time_column].dt.year.min()) * 0.02
+            )
             last_y = df[col].iloc[-1]
-            ax.text(last_x, last_y, col, fontsize=12, color=colors[i], verticalalignment="center")
+            ax.text(
+                last_x,
+                last_y,
+                col,
+                fontsize=12,
+                color=colors[i],
+                verticalalignment="center",
+            )
 
         set_plot_style(ax, df, time_column, value_columns)
 
@@ -74,24 +95,30 @@ def plot_time_series(df, time_column=None, value_columns=None, title=None, filen
 
         plt.show()
 
-# Load GDP Data from FRED
-start = '2000-01-01'
-end = '2025-02-20'
-gdp = web.DataReader('GDP', 'fred', start, end)
 
-# Combine Data into a Single DataFrame
-df = pd.DataFrame({
-    'Date': gdp.index,
-    'GDP': gdp['GDP']
-})
-df['Date'] = pd.to_datetime(df['Date'])
 
-# Calculate the Moving Average (12-Quarter Rolling Average)
-df['Moving_Avg'] = df['GDP'].rolling(window=12).mean()
+def main():
+    # Load GDP Data from FRED
+    start = "2000-01-01"
+    end = "2025-02-20"
+    gdp = web.DataReader("GDP", "fred", start, end)
 
-# Plot Time Series with Moving Average
-plot_time_series(df, 
-                 time_column='Date', 
-                 value_columns=['GDP', 'Moving_Avg'], 
-                 title='GDP with 12-Quarter Moving Average', 
-                 filename='gdp_moving_average.png')
+    # Combine Data into a Single DataFrame
+    df = pd.DataFrame({"Date": gdp.index, "GDP": gdp["GDP"]})
+    df["Date"] = pd.to_datetime(df["Date"])
+
+    # Calculate the Moving Average (12-Quarter Rolling Average)
+    df["Moving_Avg"] = df["GDP"].rolling(window=12).mean()
+
+    # Plot Time Series with Moving Average
+    plot_time_series(
+        df,
+        time_column="Date",
+        value_columns=["GDP", "Moving_Avg"],
+        title="GDP with 12-Quarter Moving Average",
+        filename="gdp_moving_average.png",
+    )
+
+
+if __name__ == "__main__":
+    main()
