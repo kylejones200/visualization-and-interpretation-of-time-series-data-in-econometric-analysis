@@ -1,0 +1,23 @@
+[project]
+name = "visualization-and-interpretation-of-time-series-data-in-econometric-analysis"
+version = "0.1.0"
+description = "Companion code for Medium article: visualization and interpretation of time series data in econometric analysis"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.10.9",
+    "numpy>=2.4.4",
+    "pandas-datareader>=0.10.0",
+    "pandas>=2.3.3",
+    "signalplot>=0.1",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
