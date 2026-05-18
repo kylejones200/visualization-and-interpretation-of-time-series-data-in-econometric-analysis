@@ -1,6 +1,5 @@
 # Description: Short example for Visualization and Interpretation of Time Series Data in Econometric Analysis.
 
-
 # Required Libraries
 
 # Set Global Matplotlib Style
@@ -21,7 +20,6 @@ def set_plot_style(ax, df, time_column, value_columns):
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_position(("outward", 5))
     ax.spines["bottom"].set_position(("outward", 5))
-
     # X-Axis: Use 50-year intervals
     years = pd.to_datetime(df[time_column]).dt.year
     x_min, x_max = years.min(), years.max()
@@ -33,7 +31,6 @@ def set_plot_style(ax, df, time_column, value_columns):
     ax.set_xticks(x_ticks)
     ax.set_xlim(x_start, x_max)
     ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{int(x)}"))
-
     # Y-Axis: Compute mean, 20%, and 80% dynamically
     all_values = np.concatenate([df[col].dropna().values for col in value_columns])
     y_20, y_mean, y_80 = np.percentile(all_values, [20, 50, 80])
@@ -51,9 +48,7 @@ def plot_time_series(
     plot: bool = False,
 ):
     if time_column is None:
-        time_column = next(
-            (col for col in df.columns if df[col].dtype == "datetime64[ns]"), None
-        )
+        time_column = next((col for col in df.columns if df[col].dtype == "datetime64[ns]"), None)
     if time_column is None:
         raise ValueError("No datetime column found.")
 
@@ -84,7 +79,6 @@ def plot_time_series(
             )
 
         set_plot_style(ax, df, time_column, value_columns)
-
         ax.set_xlabel("Year")
         ax.set_ylabel("GDP (Billions of Dollars)")
         if title:
@@ -96,20 +90,16 @@ def plot_time_series(
         plt.show()
 
 
-
 def main():
     # Load GDP Data from FRED
     start = "2000-01-01"
     end = "2025-02-20"
     gdp = web.DataReader("GDP", "fred", start, end)
-
     # Combine Data into a Single DataFrame
     df = pd.DataFrame({"Date": gdp.index, "GDP": gdp["GDP"]})
     df["Date"] = pd.to_datetime(df["Date"])
-
     # Calculate the Moving Average (12-Quarter Rolling Average)
     df["Moving_Avg"] = df["GDP"].rolling(window=12).mean()
-
     # Plot Time Series with Moving Average
     plot_time_series(
         df,
