@@ -11,14 +11,7 @@ In econometrics, visualizing time series data is fundamental for identifying sto
 
 Time series plots, moving averages, and decomposition techniques are essential tools in this process. They allow economists to distinguish between temporary noise and persistent trends, facilitating accurate forecasting and policy evaluation. Proper interpretation of these visualizations informs the specification of econometric models, including ARIMA, VAR, and state-space models.
 
-## About
 
-Place the code for this article in this repository.
-The original article export is saved as `article.md`.
-
-## Files
-
-Add your `.ipynb`, `.py`, `.yaml`, `.js`, `.ts`, or other project files here.
 
 ## Disclaimer
 
